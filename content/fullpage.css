@@ -1,0 +1,69 @@
+#snapcraft-fullpage-hud {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 2147483647 !important;
+  background: rgba(15, 23, 42, 0.92) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 12px !important;
+  padding: 12px 18px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: blur(12px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  width: 250px !important;
+  color: #ffffff !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  pointer-events: none !important;
+}
+
+.snapcraft-hud-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.snapcraft-hud-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+
+.snapcraft-hud-spinner {
+  width: 14px !important;
+  height: 14px !important;
+  border: 2px solid rgba(255, 255, 255, 0.2) !important;
+  border-top-color: #6366f1 !important;
+  border-radius: 50% !important;
+  animation: snapcraft-spin 0.8s linear infinite !important;
+}
+
+@keyframes snapcraft-spin {
+  to { transform: rotate(360deg); }
+}
+
+.snapcraft-hud-percent {
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #818cf8 !important;
+}
+
+.snapcraft-hud-bar-bg {
+  width: 100% !important;
+  height: 6px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 9999px !important;
+  overflow: hidden !important;
+}
+
+.snapcraft-hud-bar-fill {
+  width: 0% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, #6366f1, #06b6d4) !important;
+  border-radius: 9999px !important;
+  transition: width 0.15s ease !important;
+}
+

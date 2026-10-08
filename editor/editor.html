@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapCraft Editor</title>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <div class="editor-layout">
+    <!-- Top Bar -->
+    <header class="editor-header">
+      <div class="header-left">
+        <div class="logo">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+          <span class="logo-title">SnapCraft</span>
+        </div>
+
+        <div class="filename-container">
+          <input type="text" id="filename-input" value="Screenshot_Capture.png" spellcheck="false" title="Click to rename file">
+        </div>
+
+        <div class="badge-dim" id="badge-dimensions">0 × 0 px</div>
+      </div>
+
+      <div class="header-center">
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+          <button class="icon-btn" id="btn-zoom-out" title="Zoom Out (Ctrl -)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <span class="zoom-level" id="zoom-level-text">100%</span>
+          <button class="icon-btn" id="btn-zoom-in" title="Zoom In (Ctrl +)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+          <button class="text-btn" id="btn-zoom-fit" title="Fit to Screen">Fit</button>
+          <button class="text-btn" id="btn-zoom-100" title="Actual Size (100%)">1:1</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- History Controls -->
+        <div class="history-controls">
+          <button class="icon-btn" id="btn-undo" title="Undo (Ctrl+Z)" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path></svg>
+          </button>
+          <button class="icon-btn" id="btn-redo" title="Redo (Ctrl+Y)" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          </button>
+          <button class="icon-btn" id="btn-reset" title="Reset all changes">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 2v6h6"></path><path d="M21 12A9 9 0 0 0 6 5.3L3 8"></path><path d="M21 22v-6h-6"></path><path d="M3 12a9 9 0 0 0 15 6.7l3-2.7"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <!-- Copy to Clipboard -->
+        <button class="btn btn-secondary" id="btn-copy">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span>Copy</span>
+        </button>
+
+        <!-- Save / Download Dropdown -->
+        <div class="download-group">
+          <button class="btn btn-primary" id="btn-download-png">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Download PNG</span>
+          </button>
+          <button class="icon-btn download-dropdown-trigger" id="btn-download-more" title="More export options">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="download-menu hidden" id="download-menu">
+            <button class="download-menu-item" id="btn-download-jpg">Save as JPEG</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Toolbar + Canvas Workspace -->
+    <div class="workspace">
+      <!-- Left Vertical Tool Palette -->
+      <aside class="tool-palette">
+        <button class="tool-btn active" data-tool="select" title="Select & Move (V)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3l7 18 3-7 7-3L3 3z"></path></svg>
+          <span class="tool-label">Select</span>
+        </button>
+
+        <button class="tool-btn" data-tool="crop" title="Crop Image (C)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6.13 1L6 16a2 2 0 0 0 2 2h15"></path><path d="M1 6.13L16 6a2 2 0 0 1 2 2v15"></path></svg>
+          <span class="tool-label">Crop</span>
+        </button>
+
+        <div class="tool-separator"></div>
+
+        <button class="tool-btn" data-tool="pen" title="Draw Pen (P)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.586 7.586"></path><circle cx="11" cy="11" r="2"></circle></svg>
+          <span class="tool-label">Pen</span>
+        </button>
+
+        <button class="tool-btn" data-tool="highlighter" title="Highlighter (H)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 11-6 6v3h3l6-6"></path><path d="m22 12-4.6 4.6a2 2 0 0 1-2.8 0l-5.2-5.2a2 2 0 0 1 0-2.8L14 4"></path></svg>
+          <span class="tool-label">Highlight</span>
+        </button>
+
+        <button class="tool-btn" data-tool="arrow" title="Draw Arrow (A)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"></line><polyline points="9 5 19 5 19 15"></polyline></svg>
+          <span class="tool-label">Arrow</span>
+        </button>
+
+        <button class="tool-btn" data-tool="line" title="Draw Line (L)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="19" x2="19" y2="5"></line></svg>
+          <span class="tool-label">Line</span>
+        </button>
+
+        <button class="tool-btn" data-tool="rect" title="Rectangle (R)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"></rect></svg>
+          <span class="tool-label">Rect</span>
+        </button>
+
+        <button class="tool-btn" data-tool="circle" title="Circle (O)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle></svg>
+          <span class="tool-label">Circle</span>
+        </button>
+
+        <button class="tool-btn" data-tool="text" title="Add Text (T)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"></polyline><line x1="9" y1="20" x2="15" y2="20"></line><line x1="12" y1="4" x2="12" y2="20"></line></svg>
+          <span class="tool-label">Text</span>
+        </button>
+
+        <div class="tool-separator"></div>
+
+        <button class="tool-btn" data-tool="blur" title="Blur / Pixelate Area (B)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="tool-label">Blur</span>
+        </button>
+
+        <button class="tool-btn" data-tool="step" title="Numbered Step Badge (S)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v8m-2-6h2"></path></svg>
+          <span class="tool-label">Step</span>
+        </button>
+      </aside>
+
+      <!-- Center Stage: Canvas Area -->
+      <main class="canvas-viewport" id="canvas-viewport">
+        <!-- Floating Contextual Properties Bar -->
+        <div class="properties-bar" id="properties-bar">
+          <!-- Colors -->
+          <div class="prop-group colors-group">
+            <span class="prop-label">Color</span>
+            <div class="color-palette">
+              <button class="color-swatch active" style="--c: #ef4444" data-color="#ef4444" title="Red"></button>
+              <button class="color-swatch" style="--c: #f97316" data-color="#f97316" title="Orange"></button>
+              <button class="color-swatch" style="--c: #eab308" data-color="#eab308" title="Yellow"></button>
+              <button class="color-swatch" style="--c: #10b981" data-color="#10b981" title="Green"></button>
+              <button class="color-swatch" style="--c: #3b82f6" data-color="#3b82f6" title="Blue"></button>
+              <button class="color-swatch" style="--c: #8b5cf6" data-color="#8b5cf6" title="Purple"></button>
+              <button class="color-swatch" style="--c: #ffffff" data-color="#ffffff" title="White"></button>
+              <button class="color-swatch" style="--c: #0f172a" data-color="#0f172a" title="Dark"></button>
+              <label class="custom-color-label" title="Custom color picker">
+                <input type="color" id="custom-color-input" value="#ef4444">
+                <span class="color-swatch-custom"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="prop-divider"></div>
+
+          <!-- Stroke Width -->
+          <div class="prop-group" id="stroke-width-group">
+            <span class="prop-label">Size</span>
+            <div class="stroke-options">
+              <button class="size-btn" data-size="2" title="Thin (2px)"><span style="width: 2px; height: 2px;"></span></button>
+              <button class="size-btn active" data-size="4" title="Normal (4px)"><span style="width: 5px; height: 5px;"></span></button>
+              <button class="size-btn" data-size="8" title="Thick (8px)"><span style="width: 8px; height: 8px;"></span></button>
+              <button class="size-btn" data-size="14" title="Extra Thick (14px)"><span style="width: 12px; height: 12px;"></span></button>
+            </div>
+          </div>
+
+          <!-- Fill Toggle for Shapes -->
+          <div class="prop-group" id="fill-style-group">
+            <span class="prop-label">Fill</span>
+            <div class="fill-toggle-options">
+              <button class="fill-btn active" data-fill="none" title="Outline Only">Outline</button>
+              <button class="fill-btn" data-fill="semi" title="Semi-Transparent">Tint</button>
+              <button class="fill-btn" data-fill="solid" title="Solid Fill">Solid</button>
+            </div>
+          </div>
+
+          <!-- Font Size for Text -->
+          <div class="prop-group hidden" id="font-size-group">
+            <span class="prop-label">Text Size</span>
+            <select id="font-size-select">
+              <option value="16">16 px</option>
+              <option value="22" selected>22 px</option>
+              <option value="32">32 px</option>
+              <option value="48">48 px</option>
+            </select>
+          </div>
+
+          <!-- Delete Object Button (when item is selected) -->
+          <div class="prop-group hidden" id="delete-selected-group">
+            <button class="btn btn-danger-sm" id="btn-delete-selected" title="Delete selected object (Delete key)">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Crop Action Banner (Visible only during Crop mode) -->
+        <div class="crop-actions-banner hidden" id="crop-actions-banner">
+          <div class="crop-dim-indicator" id="crop-dim-text">0 × 0 px</div>
+          <button class="btn btn-sm btn-secondary" id="btn-crop-cancel">✕ Cancel</button>
+          <button class="btn btn-sm btn-primary" id="btn-crop-apply">✓ Apply Crop</button>
+        </div>
+
+        <!-- Canvas Container wrapper -->
+        <div class="canvas-container" id="canvas-container">
+          <canvas id="main-canvas"></canvas>
+          <!-- Interactive overlay for cropping and text inputs -->
+          <div id="crop-overlay" class="crop-overlay hidden">
+            <div id="crop-box" class="crop-box">
+              <div class="crop-handle nw"></div>
+              <div class="crop-handle n"></div>
+              <div class="crop-handle ne"></div>
+              <div class="crop-handle w"></div>
+              <div class="crop-handle e"></div>
+              <div class="crop-handle sw"></div>
+              <div class="crop-handle s"></div>
+              <div class="crop-handle se"></div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="editor.js"></script>
+</body>
+</html>
+

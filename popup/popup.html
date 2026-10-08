@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SnapCraft</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <div class="logo-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+            <circle cx="12" cy="13" r="4"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>SnapCraft</h1>
+          <span class="version-tag">PRO</span>
+        </div>
+      </div>
+      <div class="header-settings">
+        <label for="delay-select" class="delay-label" title="Capture delay countdown">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <select id="delay-select" title="Delay Timer">
+            <option value="0">0s delay</option>
+            <option value="2">2s delay</option>
+            <option value="5">5s delay</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <!-- Error message banner if active tab cannot be captured (e.g. chrome://) -->
+    <div id="status-banner" class="status-banner hidden"></div>
+
+    <!-- Main Capture Options -->
+    <main class="capture-options">
+      <!-- Option 1: Full Page -->
+      <button class="capture-card" id="btn-full-page" data-mode="full-page">
+        <div class="card-icon-wrapper fullpage-gradient">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="8" y1="10" x2="16" y2="10"></line>
+            <line x1="8" y1="14" x2="16" y2="14"></line>
+            <path d="M12 18v2m-2-1h4"></path>
+          </svg>
+        </div>
+        <div class="card-content">
+          <div class="card-title-row">
+            <span class="card-title">Full Page Screenshot</span>
+            <span class="shortcut-tag">Alt+Shift+F</span>
+          </div>
+          <p class="card-desc">Auto-scrolls & stitches the entire webpage</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Option 2: Full Window / Visible Screen -->
+      <button class="capture-card" id="btn-visible-window" data-mode="visible">
+        <div class="card-icon-wrapper visible-gradient">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <div class="card-content">
+          <div class="card-title-row">
+            <span class="card-title">Visible Window</span>
+            <span class="shortcut-tag">Alt+Shift+V</span>
+          </div>
+          <p class="card-desc">Instant capture of current viewport</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </button>
+
+      <!-- Option 3: Selection Screenshot -->
+      <button class="capture-card" id="btn-selection" data-mode="selection">
+        <div class="card-icon-wrapper selection-gradient">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 3h3a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v0a2 2 0 0 1 2-2z"></path>
+            <path d="M4 11v2"></path>
+            <path d="M4 17a2 2 0 0 0 2 2h3"></path>
+            <path d="M15 21h3a2 2 0 0 0 2-2v-3"></path>
+            <path d="M20 11V9"></path>
+            <path d="M20 5a2 2 0 0 0-2-2h-3"></path>
+            <line x1="10" y1="14" x2="14" y2="10"></line>
+            <polyline points="10 10 14 10 14 14"></polyline>
+          </svg>
+        </div>
+        <div class="card-content">
+          <div class="card-title-row">
+            <span class="card-title">Selected Area</span>
+            <span class="shortcut-tag">Alt+Shift+S</span>
+          </div>
+          <p class="card-desc">Click & drag to capture any custom region</p>
+        </div>
+        <div class="card-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
+      </button>
+    </main>
+
+    <!-- Footer info -->
+    <footer class="popup-footer">
+      <div class="footer-tip">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span>Opens instantly in built-in image annotation editor</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
+
