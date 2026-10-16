@@ -194,7 +194,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const dateStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}-${String(now.getMinutes()).padStart(2, '0')}`;
       filenameInput.value = `${titleSlug}_${dateStr}.png`;
 
-      if (session.type === 'visible') {
+      if (session.type === 'visible' || session.type === 'section') {
         const img = new Image();
         img.onload = () => loadBaseImage(img);
         img.src = session.image;

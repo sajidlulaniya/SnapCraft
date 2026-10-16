@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SnapCraft - Smart Screenshot & Annotation Tool",
   "version": "1.0.0",
-  "description": "Capture Full Page, Visible Screen, or Selected Area screenshots. Edit, annotate, draw, crop, and save in a built-in studio.",
+  "description": "Capture Full Page, Visible Screen, Selected Area, or Section screenshots. Edit, annotate, crop, and save in a built-in studio.",
   "permissions": [
     "activeTab",
     "scripting",

@@ -6,7 +6,13 @@ A modern, high-performance Google Chrome Extension (Manifest V3) for capturing f
 
 ## 🌟 Key Features
 
-### 1. 3 Customizable Capture Modes
+### 1. 4 Customizable Capture Modes
+- **Section Capture**:
+  - Hover over a div or semantic section to see its highlighted border, then click to capture it.
+  - Press **Up arrow** to select a parent section, or **Esc** to cancel selection/capture.
+  - Captures tall and wide sections by scrolling and stitching only the selected bounds. A selected scrollable div is temporarily expanded to capture its content.
+  - Restores the page layout and scroll position and opens the result in the annotation editor.
+  - Keep the tab active until capture finishes. Content inside cross-origin frames or closed shadow roots cannot be selected individually. Independently scrolling descendants keep their own visible content; select that scrolling div directly to capture its full content.
 - **📄 Full Page Screenshot**:
   - Automatically scrolls down the webpage, captures viewport slices, and stitches them seamlessly into a high-resolution, full-page screenshot.
   - Smart deduplication of `position: fixed` and `position: sticky` headers (headers only appear once at the top, without repeating across slices).

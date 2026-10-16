@@ -99,6 +99,14 @@ async function startFullPageCapture(tab, delay = 0) {
 }
 
 // Message Listener
+async function startSectionCapture(tab, delay = 0) {
+  if (delay > 0) await sleep(delay * 1000);
+  await chrome.scripting.executeScript({
+    target: { tabId: tab.id },
+    files: ['content/section.js']
+  });
+}
+
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   const tab = sender.tab;
 
@@ -115,6 +123,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         await startSelectionCapture(activeTab, delay);
       } else if (message.mode === 'full-page') {
         await startFullPageCapture(activeTab, delay);
+      } else if (message.mode === 'section') {
+        await startSectionCapture(activeTab, delay);
       }
     })();
     return false;
@@ -143,6 +153,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       // Retry up to 4 times with cooldown to handle Chrome captureVisibleTab throttling
       for (let attempt = 0; attempt < 4; attempt++) {
         try {
+          if (message.section && tab) {
+            const [active] = await chrome.tabs.query({ active: true, windowId: targetWindowId });
+            if (active?.id !== tab.id) throw new Error('Keep the selected tab active during section capture.');
+          }
           dataUrl = await chrome.tabs.captureVisibleTab(targetWindowId, { format: 'png' });
           if (dataUrl) break;
         } catch (err) {
@@ -172,6 +186,29 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 
   // Full Page Finished
+  if (message.action === 'FINISH_SECTION') {
+    (async () => {
+      try {
+        if (!tab || !message.image?.startsWith('data:image/png;base64,')) {
+          throw new Error('Invalid section screenshot.');
+        }
+        const sessionId = generateSessionId();
+        await chrome.storage.local.set({
+          [sessionId]: {
+            type: 'section', image: message.image,
+            title: tab.title || 'Section Screenshot', url: tab.url || '', timestamp: Date.now()
+          }
+        });
+        await openEditor(sessionId);
+        sendResponse({ success: true });
+        cleanOldSessions();
+      } catch (error) {
+        sendResponse({ error: error.message });
+      }
+    })();
+    return true;
+  }
+
   if (message.action === 'FINISH_FULL_PAGE') {
     (async () => {
       if (tab && tab.id) {

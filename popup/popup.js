@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnFullPage = document.getElementById('btn-full-page');
   const btnVisible = document.getElementById('btn-visible-window');
   const btnSelection = document.getElementById('btn-selection');
+  const btnSection = document.getElementById('btn-section');
   const delaySelect = document.getElementById('delay-select');
   const statusBanner = document.getElementById('status-banner');
 
@@ -23,6 +24,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     btnFullPage.disabled = true;
     btnVisible.disabled = true;
     btnSelection.disabled = true;
+    btnSection.disabled = true;
+    btnSection.style.opacity = '0.5';
     btnFullPage.style.opacity = '0.5';
     btnVisible.style.opacity = '0.5';
     btnSelection.style.opacity = '0.5';
@@ -48,5 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   btnFullPage.addEventListener('click', () => triggerCapture('full-page'));
   btnVisible.addEventListener('click', () => triggerCapture('visible'));
   btnSelection.addEventListener('click', () => triggerCapture('selection'));
+  btnSection.addEventListener('click', () => triggerCapture('section'));
 });
 
